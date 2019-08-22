@@ -185,6 +185,27 @@ class Lane_Detection: #Lane_Detction 클래스 생성후, original img 변경
 
         cv2.imshow("ss",monitor)
         return monitor
+    
+    def get_birdview(slef, img):
+    mtx = [[1.03223922e+03, 0.00000000e+00, 3.83576223e+02],
+           [0, 1.09843870e+03, 3.16372021e+02],
+           [0, 0, 1.00000000e+00]]
+    dist = [[1.50968260e-01, -2.00958085e+00, -6.04807148e-03, -4.80908654e-03,
+             7.14436124e+00]]
+
+    pts1 = np.float32([(348, 28),
+                       (18, 263),
+                       (798, 263),
+                       (463, 28)])
+
+    pts2 = np.float32([(348, 0),
+                       (348, 600),
+                       (463, 600),
+                       (463, 0)])
+    img2 = cv2.undistort(img, mtx, dist, None, mtx)
+    M = cv2.getPerspectiveTransform(pts1, pts2)
+    warped_img = cv2.warpPerspective(img2, M, (800, 600), flags=cv2.INTER_LINEAR)
+    return warped_img
 
 def show_video():
     video="./video/lane_red.mp4"
